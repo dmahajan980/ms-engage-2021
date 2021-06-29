@@ -1,6 +1,9 @@
+import { FC } from 'react';
 import { Icon } from '@chakra-ui/icons';
 
-const Menu = (props) => (
+import AllChakraProps from '../../types/AllChakraProps';
+
+const Menu: FC<AllChakraProps> = (props) => (
   <Icon viewBox='-4 -4 32 32' {...props}>
     <path
       fill='currentColor'
