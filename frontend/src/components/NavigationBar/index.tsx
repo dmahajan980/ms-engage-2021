@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import { Flex, IconButton, Image, Spinner, Text } from '@chakra-ui/react';
+import { Flex, Spinner, Text } from '@chakra-ui/react';
 
 import { Props } from './interface';
-
-import MenuIcon from '../Icons/Menu';
 
 import styleProps from './styles';
 
