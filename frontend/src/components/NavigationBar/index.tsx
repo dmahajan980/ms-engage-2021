@@ -15,7 +15,7 @@ const NavigationBar: FC<Props> = ({
   return (
     <Flex {...styleProps.wrapper} {...props}>
       <Flex {...styleProps.titleWrapper}>
-        {isSignedIn ? (
+        {/* {isSignedIn ? (
           <IconButton
             aria-label='Open Menu'
             icon={<MenuIcon {...styleProps.icon} />}
@@ -27,8 +27,8 @@ const NavigationBar: FC<Props> = ({
             alt='Microsoft Logo'
             {...styleProps.logo}
           />
-        )}
-        <Text {...styleProps.title}>Microsoft Teams</Text>
+        )} */}
+        <Text {...styleProps.title}>Cheems</Text>
       </Flex>
 
       {isLoading && <Spinner />}

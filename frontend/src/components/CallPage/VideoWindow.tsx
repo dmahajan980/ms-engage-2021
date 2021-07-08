@@ -4,9 +4,11 @@ import {
   Button,
   chakra,
   Flex,
+  Icon,
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { io, Socket } from 'socket.io-client';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import Peer from 'simple-peer';
@@ -15,6 +17,8 @@ import { motion } from 'framer-motion';
 
 import VideoTile from '../VideoTile';
 import ModalBox from '../ModalBox';
+import Time from '../Time';
+import JoiningDialog from '../JoiningDialog';
 
 import useAudioVideoStream from '../../hooks/useAudioVideoStream';
 
@@ -43,6 +47,11 @@ const VideoWindow: FC<Props> = ({ setIsCallLoading, onLeave, ...props }) => {
   const [guestStream, setGuestStream] = useState<MediaStream | null>(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isInfoDialogOpen,
+    onOpen: onInfoDialogOpen,
+    onClose: onInfoDialogClose,
+  } = useDisclosure();
 
   let { roomId } = useParams<{ roomId: string }>();
 
@@ -97,13 +106,12 @@ const VideoWindow: FC<Props> = ({ setIsCallLoading, onLeave, ...props }) => {
         if (otherUserId === callerRef.current) {
           if (peer) {
             peer.destroy();
+            callerRef.current = null;
+            setGuestStream(null);
             if (stream) {
               setPeer(null);
             }
           }
-
-          callerRef.current = null;
-          setGuestStream(null);
         }
       };
       socketRef.current.on('user-left', userLeftListener);
@@ -153,7 +161,6 @@ const VideoWindow: FC<Props> = ({ setIsCallLoading, onLeave, ...props }) => {
       peerInstance.on('close', () => setGuestStream(null));
       setPeer(peerInstance);
 
-
       return () => {
         peerInstance.removeAllListeners('close');
       };
@@ -180,23 +187,39 @@ const VideoWindow: FC<Props> = ({ setIsCallLoading, onLeave, ...props }) => {
         {...(guestStream ? styleProps.selfVideoFloating : styleProps.selfVideo)}
       />
       <Flex {...styleProps.actionBar}>
+        <Time />
+        <Flex>
+          <IconButton
+            aria-label={isMuted ? 'Unmute mic' : 'Mute mic'}
+            icon={<Mic isMuted={isMuted} {...styleProps.icon} />}
+            onClick={() => setIsMuted((prevState) => !prevState)}
+            {...styleProps.iconButton}
+          />
+          <IconButton
+            aria-label={`Turn ${isCameraOff ? 'on' : 'off'} camera`}
+            icon={<Camera isOff={isCameraOff} {...styleProps.icon} />}
+            onClick={() => setIsCameraOff((prevState) => !prevState)}
+            {...styleProps.iconButton}
+          />
+          <IconButton
+            aria-label='Disconnect call'
+            icon={<CallEnd {...styleProps.icon} />}
+            onClick={disconnectButtonListener}
+            {...styleProps.iconButton}
+            {...styleProps.disconnectButton}
+          />
+        </Flex>
         <IconButton
-          aria-label={isMuted ? 'Unmute Mic' : 'Mute Mic'}
-          icon={<Mic isMuted={isMuted} {...styleProps.icon} />}
-          onClick={() => setIsMuted((prevState) => !prevState)}
-          {...styleProps.iconButton}
-        />
-        <IconButton
-          aria-label={`Turn ${isCameraOff ? 'on' : 'off'} Camera`}
-          icon={<Camera isOff={isCameraOff} {...styleProps.icon} />}
-          onClick={() => setIsCameraOff((prevState) => !prevState)}
-          {...styleProps.iconButton}
-        />
-        <IconButton
-          aria-label='Disconnect Call'
-          icon={<CallEnd {...styleProps.icon} />}
-          onClick={disconnectButtonListener}
-          {...styleProps.iconButton}
+          aria-label={'Show call joining info'}
+          icon={
+            <Icon
+              as={InfoOutlineIcon}
+              {...styleProps.icon}
+              {...styleProps.infoIcon}
+            />
+          }
+          onClick={onInfoDialogOpen}
+          {...styleProps.infoIconButton}
         />
       </Flex>
 
@@ -211,6 +234,12 @@ const VideoWindow: FC<Props> = ({ setIsCallLoading, onLeave, ...props }) => {
           Return to Homepage
         </Button>
       </ModalBox>
+
+      <JoiningDialog
+        url={window.location.host + window.location.pathname}
+        isOpen={isInfoDialogOpen}
+        onClose={onInfoDialogClose}
+      />
     </Box>
   );
 };

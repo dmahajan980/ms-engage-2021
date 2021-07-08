@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
 import { Instance } from 'simple-peer';
 
 interface PeerConnections {
@@ -16,4 +16,9 @@ interface VideoWindowProps {
   props?: any[];
 }
 
-export type { PeerConnections, Props, VideoWindowProps };
+interface ExitWindowProps {
+  rejoinCall: MouseEventHandler<HTMLButtonElement>;
+  props?: any[];
+}
+
+export type { PeerConnections, Props, VideoWindowProps, ExitWindowProps };

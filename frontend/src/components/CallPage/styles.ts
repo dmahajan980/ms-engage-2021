@@ -3,11 +3,12 @@ import StyleSheet from '../../types/StyleSheet';
 const styleProps: StyleSheet = {
   actionBar: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
 
     h: 'full',
-    maxH: [16],
+    maxH: 16,
     w: 'full',
+    px: 5,
 
     pos: 'fixed',
     bottom: 0,
@@ -19,7 +20,14 @@ const styleProps: StyleSheet = {
 
     _hover: {
       bgColor: 'theme.purpleBlue.dark',
-    }
+    },
+  },
+  disconnectButton: {
+    bgColor: '#C24042',
+    _hover: {
+      bgColor: '#FF4042',
+      transform: 'translateY(-3px)',
+    },
   },
   icon: {
     color: 'white',
@@ -29,16 +37,29 @@ const styleProps: StyleSheet = {
     boxShadow: 'dark-lg',
     ml: 3,
 
-    transition: 'margin-bottom 50ms linear, background-color 50ms ease-in',
+    transition: 'transform 50ms linear, background-color 50ms ease-in',
 
     _hover: {
       bgColor: 'theme.purpleBlue.light',
-      mb: 1,
+      transform: 'translateY(-3px)',
     },
 
     _active: {
       bgColor: 'theme.purpleBlue.light',
-      mb: 1,
+      transform: 'translateY(-3px)',
+    },
+  },
+  infoIcon: {
+    h: 6,
+    w: 'auto'
+  },
+  infoIconButton: {
+    variant: 'ghost',
+    _active: {
+      bgColor: 'transparent',
+    },
+    _hover: {
+      bgColor: 'transparent',
     },
   },
   selfVideo: {
@@ -47,7 +68,7 @@ const styleProps: StyleSheet = {
   },
   selfVideoFloating: {
     pos: 'absolute',
-    bottom: ['unset', 'unset', 5],
+    bottom: ['unset', 'unset', 16],
     right: [3, 3, 5],
     top: [3, 3, 'unset'],
 
@@ -67,6 +88,8 @@ const styleProps: StyleSheet = {
 
     h: '100vh',
     maxW: '100vw',
+    pb: 16,
+    pt: 12,
     w: 'full',
   },
 };

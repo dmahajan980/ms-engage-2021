@@ -46,7 +46,9 @@ const disconnectCallback = (socket, io, userId) => {
   }
 
   if (rooms[roomId] && rooms[roomId].size) {
-    io.to(roomId).emit('user-left', userId);
+    rooms[roomId].forEach(otherUserId =>
+      io.to(otherUserId).emit('user-left', userId)
+    );
   } else if (rooms[roomId]) {
     delete rooms[roomId];
   }
