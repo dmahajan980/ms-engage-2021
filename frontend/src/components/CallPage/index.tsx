@@ -18,7 +18,6 @@ import Mic from '../Icons/Mic';
 const Video = chakra('video');
 const MotionVideo = motion(Video);
 
-// TODO: Change this IP to that of hosted server.
 // TODO: Create a socket connection post render (i.e. create this inside a useEffect hook)
 // Establish socket connection.
 
@@ -40,7 +39,7 @@ const CallPage: FC<{}> = () => {
     null
   );
   useEffect(() => {
-    socketRef.current = io('http://127.0.0.1:9000/');
+    socketRef.current = io(process.env.REACT_APP_SOCKET_IP || 'http://127.0.0.1:9000/');
 
     socketRef.current.on('my-user-id', (userId) => {
       console.log(userId);

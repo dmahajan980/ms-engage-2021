@@ -20,5 +20,5 @@ app.use('/', home);
 io.on('connection', socketCallback);
 
 // Start server
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 server.listen(port);
