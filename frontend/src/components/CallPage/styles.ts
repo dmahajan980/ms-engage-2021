@@ -35,6 +35,7 @@ const styleProps: StyleSheet = {
   iconButton: {
     bgColor: 'theme.purpleBlue.normal',
     boxShadow: 'dark-lg',
+    borderRadius: 0,
     ml: 3,
 
     transition: 'transform 50ms linear, background-color 50ms ease-in',
