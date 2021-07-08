@@ -17,7 +17,7 @@ const io = socketIO(server, {
 app.use('/', home);
 
 // IO Connection
-io.on('connection', socketCallback);
+io.on('connection', (socket) => socketCallback(socket, io));
 
 // Start server
 const port = process.env.PORT || 9000;

@@ -10,4 +10,10 @@ interface Props {
   props?: any[];
 }
 
-export type { PeerConnections, Props };
+interface VideoWindowProps {
+  setIsCallLoading: Dispatch<SetStateAction<boolean>>;
+  onLeave: Function;
+  props?: any[];
+}
+
+export type { PeerConnections, Props, VideoWindowProps };
