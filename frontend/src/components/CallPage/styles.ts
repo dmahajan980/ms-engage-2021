@@ -13,6 +13,14 @@ const styleProps: StyleSheet = {
     bottom: 0,
     zIndex: 2,
   },
+  button: {
+    bgColor: 'theme.purpleBlue.light',
+    borderRadius: 0,
+
+    _hover: {
+      bgColor: 'theme.purpleBlue.dark',
+    }
+  },
   icon: {
     color: 'white',
   },

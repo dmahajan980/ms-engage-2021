@@ -1,14 +1,17 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { Box, chakra, Flex, IconButton } from '@chakra-ui/react';
+import { Box, Button, chakra, Flex, IconButton, useDisclosure } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
-import { useParams } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import Peer from 'simple-peer';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 import { motion } from 'framer-motion';
 
 import VideoTile from '../VideoTile';
+import ModalBox from '../ModalBox';
 
 import useAudioVideoStream from '../../hooks/useAudioVideoStream';
+
+import { Props } from './interface';
 
 import styleProps from './styles';
 import Camera from '../Icons/Camera';
@@ -21,7 +24,7 @@ const MotionVideo = motion(Video);
 // TODO: Create a socket connection post render (i.e. create this inside a useEffect hook)
 // Establish socket connection.
 
-const CallPage: FC<{}> = () => {
+const CallPage: FC<Props> = ({ setIsCallLoading, ...props }) => {
   const [isMuted, setIsMuted] = useState(true);
   const [isCameraOff, setIsCameraOff] = useState(false);
 
@@ -29,6 +32,8 @@ const CallPage: FC<{}> = () => {
 
   const userIdRef = useRef('');
   const [guestStreams, setGuestStreams] = useState<MediaStream[]>([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   let { roomId } = useParams<{ roomId: string }>();
 
@@ -39,11 +44,16 @@ const CallPage: FC<{}> = () => {
     null
   );
   useEffect(() => {
-    socketRef.current = io(process.env.REACT_APP_SOCKET_IP || 'http://127.0.0.1:9000/');
+    socketRef.current = io(
+      process.env.REACT_APP_SOCKET_IP || 'http://127.0.0.1:9000/'
+    );
 
-    socketRef.current.on('my-user-id', (userId) => {
-      console.log(userId);
-      userIdRef.current = userId;
+    socketRef.current.on('my-user-id', (data) => {
+      console.log(data);
+      userIdRef.current = data.userId;
+      if (data.isFirstUser) {
+        setIsCallLoading(false);
+      }
     });
 
     socketRef.current.on('call-user', (otherUserId, signalData) => {
@@ -57,9 +67,15 @@ const CallPage: FC<{}> = () => {
       if (peerRef.current) {
         callerRef.current = otherUserId;
         peerRef.current.signal(signalData);
+        setIsCallLoading(false);
       }
     });
-  }, [stream, roomId]);
+
+    socketRef.current.on('max-limit', () => {
+      onOpen();
+      setIsCallLoading(false);
+    });
+  }, [stream, roomId, setIsCallLoading, onOpen]);
 
   useEffect(() => {
     if (stream && !peerRef.current) {
@@ -98,7 +114,7 @@ const CallPage: FC<{}> = () => {
   ));
 
   return (
-    <Box {...styleProps.wrapper}>
+    <Box {...styleProps.wrapper} {...props}>
       {renderedVideos}
       <MotionVideo
         ref={videoRef}
@@ -123,6 +139,16 @@ const CallPage: FC<{}> = () => {
           {...styleProps.iconButton}
         />
       </Flex>
+
+      <ModalBox
+        title='Room Fully Occupied'
+        message='The call you are trying to join is at max capacity. Please try again later.'
+        isOpen={isOpen}
+        onClose={onClose}
+        hasCloseBtn={false}
+      >
+        <Button as={RouterLink} to='/' {...styleProps.button}>Return to Homepage</Button>
+      </ModalBox>
     </Box>
   );
 };

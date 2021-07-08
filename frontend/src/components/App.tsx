@@ -1,20 +1,20 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import NavigationBar from './NavigationBar';
 import CallPage from './CallPage';
 
 const App: FC<{}> = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   return (
     <Router>
-      <NavigationBar />
+      <NavigationBar isLoading={isLoading} />
       <Switch>
         <Route path='/:roomId'>
-          <CallPage />
+          <CallPage setIsCallLoading={setIsLoading} />
         </Route>
-        <Route path="/">
-          {/* <div>hello, homepage</div> */}
-        </Route>
+        <Route path='/'>{/* <div>hello, homepage</div> */}</Route>
       </Switch>
     </Router>
   );

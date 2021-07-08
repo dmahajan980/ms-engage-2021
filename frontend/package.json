@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_SOCKET_IP=https://ms-engage.azurewebsites.net/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

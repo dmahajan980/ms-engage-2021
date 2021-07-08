@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "develop": "PORT=9000 nodemon src/index.js"
+    "develop": "nodemon src/app.js"
   },
   "author": "Divyanshu Mahajan",
   "license": "ISC",
