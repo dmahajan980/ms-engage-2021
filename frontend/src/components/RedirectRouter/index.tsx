@@ -14,14 +14,14 @@ const RedirectRouter: FC<Props> = ({
       path={path}
       render={({ location }) =>
         redirectCondition ? (
-          children
-        ) : (
           <Redirect
             to={{
               pathname: redirectPath,
               state: { from: location },
             }}
           />
+        ) : (
+          children
         )
       }
     />

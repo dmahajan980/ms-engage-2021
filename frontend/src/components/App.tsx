@@ -1,33 +1,35 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import NavigationBar from './NavigationBar';
 import CallPage from './CallPage';
-import Home from './Home';
+import Login from './Login';
 import RedirectRouter from './RedirectRouter';
 
 const App: FC<{}> = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
 
-  if (!isSignedIn) {
-    localStorage.removeItem('name');
-    localStorage.removeItem('username');
-  }
-  
+  useEffect(() => {
+    if (!isSignedIn) {
+      localStorage.removeItem('name');
+      localStorage.removeItem('username');
+    }
+  }, [isSignedIn]);
+
   return (
     <Router>
       {isSignedIn && <NavigationBar isLoading={isLoading} />}
       <Switch>
-        <RedirectRouter path='/:roomId' redirectCondition={isSignedIn}>
-          <CallPage setIsCallLoading={setIsLoading} />
-        </RedirectRouter>
         <RedirectRouter
-          path='/'
-          redirectCondition={!isSignedIn}
-          redirectPath='/52'
+          path='/login'
+          redirectCondition={isSignedIn}
+          redirectPath='/'
         >
-          <Home onSignInSuccess={() => setIsSignedIn(true)} />
+          <Login onSignInSuccess={() => setIsSignedIn(true)} />
+        </RedirectRouter>
+        <RedirectRouter path='/:roomId' redirectCondition={!isSignedIn}>
+          <CallPage setIsCallLoading={setIsLoading} />
         </RedirectRouter>
       </Switch>
     </Router>

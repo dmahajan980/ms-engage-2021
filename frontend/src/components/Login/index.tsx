@@ -1,14 +1,15 @@
 import { FC } from 'react';
 import { Box, Flex, Text, useToast } from '@chakra-ui/react';
 import MicrosoftLogin from 'react-microsoft-login';
+import axios from 'axios';
 
 import { Props } from './interface';
 
 import styleProps from './styles';
 
-const Home: FC<Props> = ({ onSignInSuccess }) => {
+const Login: FC<Props> = ({ onSignInSuccess }) => {
   const toast = useToast();
-  
+
   const authHandler = (err: any, data: any) => {
     if (err) {
       toast({
@@ -20,12 +21,15 @@ const Home: FC<Props> = ({ onSignInSuccess }) => {
       });
       return;
     }
+
+    onSignInSuccess();
     
-    // send ID_token or Token_ID
-    const { name, userName, idToken } = data.account;
+    const { name, userName, accessToken } = data.account;
     localStorage.setItem('name', name);
     localStorage.setItem('username', userName);
-    console.log(name, userName, idToken);
+    localStorage.setItem('accessToken', accessToken);
+
+    axios.post('http://localhost:9000/auth/sign-in/', { data });
   };
 
   return (
@@ -44,4 +48,4 @@ const Home: FC<Props> = ({ onSignInSuccess }) => {
   );
 };
 
-export default Home;
+export default Login;
