@@ -8,32 +8,64 @@ const styleProps: StyleSheet = {
   avatarButton: {
     variant: 'ghost',
   },
-  badgeOnline: {
-    bgColor: '#92C353',
-    boxSize: 3.5,
-    borderColor: 'theme.purpleBlue.dark',
-    borderWidth: 2.5,
+  detailsBox: {
+    pl: 3,
+    pr: 12,
+    py: 5,
   },
-  badgeOffline: {
-    bgColor: '#6F7A87',
-    boxSize: 3.5,
-    borderColor: 'theme.purpleBlue.dark',
-    borderWidth: 2.5,
+  detailsLine: {
+    fontSize: 'sm',
+  },
+  email: {
+    fontWeight: 'medium',
+    fontSize: 'sm',
   },
   icon: {
-    h: 8,
-    w: 'auto',
+    size: 'sm',
   },
   iconButton: {
     px: 10,
     variant: 'ghost',
     w: [8, 10, 14],
+
+    _active: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+
+    _focus: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+
+    _hover: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
   },
   logo: {
     h: 6,
     ml: 2,
     mr: [1.5, 1, 0],
     w: 'auto',
+  },
+  menuList: {
+    bgColor: 'theme.purpleBlue.light',
+    borderRadius: 0,
+  },
+  menuOption: {
+    _active: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+
+    _focus: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+
+    _hover: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+  },
+  name: {
+    fontSize: 'xl',
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 'lg',

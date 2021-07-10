@@ -1,39 +1,50 @@
-import { FC, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { FC, useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  AuthenticatedTemplate,
+  MsalProvider,
+  UnauthenticatedTemplate,
+} from '@azure/msal-react';
+import { PublicClientApplication } from '@azure/msal-browser';
 
 import NavigationBar from './NavigationBar';
 import CallPage from './CallPage';
 import Login from './Login';
-import RedirectRouter from './RedirectRouter';
+import Home from './Home';
+
+import { IpProvider } from '../context/IP';
+
+import pcaConfig from '../config/pca';
+
+const pca = new PublicClientApplication(pcaConfig);
 
 const App: FC<{}> = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (!isSignedIn) {
-      localStorage.removeItem('name');
-      localStorage.removeItem('username');
-    }
-  }, [isSignedIn]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
     <Router>
-      {isSignedIn && <NavigationBar isLoading={isLoading} />}
-      <Switch>
-        <RedirectRouter
-          path='/login'
-          redirectCondition={isSignedIn}
-          redirectPath='/'
-        >
-          <Login onSignInSuccess={() => setIsSignedIn(true)} />
-        </RedirectRouter>
-        <RedirectRouter path='/:roomId' redirectCondition={!isSignedIn}>
-          <CallPage setIsCallLoading={setIsLoading} />
-        </RedirectRouter>
-      </Switch>
+      <IpProvider>
+        <MsalProvider instance={pca}>
+          <UnauthenticatedTemplate>
+            <Login />
+          </UnauthenticatedTemplate>
+
+          <AuthenticatedTemplate>
+            <NavigationBar isLoading={isLoading} />
+            <Switch>
+              <Route path='/:roomId'>
+                <CallPage setIsCallLoading={setIsLoading} />
+              </Route>
+              <Route path='/'>
+                <Home />
+              </Route>
+            </Switch>
+          </AuthenticatedTemplate>
+        </MsalProvider>
+      </IpProvider>
     </Router>
   );
 };
 
 export default App;
+export { pca };

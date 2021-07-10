@@ -11,6 +11,18 @@ const styleProps: StyleSheet = {
 
     bgColor: 'theme.purpleBlue.normal',
   },
+  button: {
+    bgColor: 'white',
+
+    borderColor: 'black',
+    borderRadius: 0,
+    borderWidth: 1,
+
+    fontWeight: 'normal',
+
+    pb: 3,
+    pt: 3.5,
+  },
   subTitle: {
     fontSize: ['md', 'lg', 'xl', '2xl'],
     fontWeight: 'light',

@@ -1,5 +1,4 @@
 interface Props {
-  isSignedIn?: boolean;
   isLoading: boolean;
   props?: any[];
 }
