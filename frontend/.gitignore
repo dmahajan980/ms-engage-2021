@@ -25,4 +25,4 @@ yarn-error.log*
 extras/
 **/*.lock
 **/*-lock.json
-.env
+**/*.env

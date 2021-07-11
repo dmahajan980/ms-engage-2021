@@ -1,19 +1,27 @@
-import { useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useMsal } from '@azure/msal-react';
 import {
   InteractionRequiredAuthError,
   InteractionStatus,
 } from '@azure/msal-browser';
-import { useToast } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
+import { Route, Switch } from 'react-router-dom';
+
+import SideBar from '../SideBar';
 
 import { useIpContext } from '../../context/IP';
-
 import syncLoginWithServer from '../../utils/syncLoginWithServer';
 
-const Home = () => {
+import { SelectedSection } from '../../types/SelectedSection';
+
+import styleProps from './styles';
+
+const Home: FC<{}> = () => {
   const { instance, inProgress, accounts } = useMsal();
   const toast = useToast();
   const IP = useIpContext();
+  
+  const [selected, setSelected] = useState(SelectedSection.Chat);
 
   useEffect(() => {
     const accessTokenRequest = {
@@ -47,7 +55,19 @@ const Home = () => {
     }
   }, [instance, accounts, inProgress, toast, IP]);
 
-  return <div></div>;
+  return (
+    <Box {...styleProps.wrapper}>
+      <SideBar selectedSection={selected} onSectionClick={setSelected} />
+      <Switch>
+        <Route exact path='chat'>
+          Chat
+        </Route>
+        <Route exact path='call'>
+          Call
+        </Route>
+      </Switch>
+    </Box>
+  );
 };
 
 export default Home;

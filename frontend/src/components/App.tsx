@@ -32,11 +32,11 @@ const App: FC<{}> = () => {
           <AuthenticatedTemplate>
             <NavigationBar isLoading={isLoading} />
             <Switch>
-              <Route path='/:roomId'>
-                <CallPage setIsCallLoading={setIsLoading} />
-              </Route>
               <Route path='/'>
                 <Home />
+              </Route>
+              <Route path='room/:roomId'>
+                <CallPage setIsCallLoading={setIsLoading} />
               </Route>
             </Switch>
           </AuthenticatedTemplate>

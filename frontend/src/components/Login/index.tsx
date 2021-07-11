@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, useToast } from '@chakra-ui/react';
 import { useMsal } from '@azure/msal-react';
 
 import styleProps from './styles';
@@ -7,12 +7,26 @@ import MSLogo from '../Icons/MS';
 
 const Login: FC<{}> = () => {
   const { instance } = useMsal();
+  const toast = useToast();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const authHandler = () => {
+  const authHandler = async () => {
     setIsLoading(true);
-    instance.loginPopup();
+    try {
+      await instance.loginPopup();
+    } catch (e) {
+      toast({
+        title: 'Failed to sign in',
+        position: 'bottom-right',
+        status: 'error',
+        variant: 'left-accent',
+        isClosable: true,
+      });
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
