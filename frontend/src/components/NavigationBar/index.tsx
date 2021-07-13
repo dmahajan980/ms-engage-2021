@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useMsal } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { Props } from './interface';
 
@@ -40,7 +41,7 @@ const NavigationBar: FC<Props> = ({ isLoading = false, ...props }) => {
   return (
     <Flex {...styleProps.wrapper} {...props}>
       <Flex {...styleProps.titleWrapper}>
-        <Text {...styleProps.title}>Cheems</Text>
+        <Text as={RouterLink} to='/' {...styleProps.title}>Cheems</Text>
       </Flex>
 
       <Flex>
