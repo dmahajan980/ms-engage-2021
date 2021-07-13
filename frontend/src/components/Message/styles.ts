@@ -3,7 +3,7 @@ import StyleSheet from '../../types/StyleSheet';
 const styleProps: StyleSheet = {
   message: {
     bgColor: `theme.purpleBlue.normal`,
-    borderRadius: 20,
+    borderRadius: 0,
     color: 'white',
     fontSize: 'sm',
     maxW: ['2xs', 'xs', 'sm', 'md', 'lg'],

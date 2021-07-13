@@ -12,11 +12,22 @@ const styleProps: StyleSheet = {
   },
   detailsWrapper: {
     alignItems: 'center',
+    justifyContent: 'space-between',
     bgColor: '#DEDEDE',
 
     h: '3.75rem',
     px: 5,
     w: 'full',
+  },
+  details: {
+    alignItems: 'center',
+  },
+  inviteIcon: {
+    h: 5,
+    w: 5,
+  },
+  inviteIconButton: {
+    bgColor: 'transparent',
   },
   mainWindow: {
     w: 'full',

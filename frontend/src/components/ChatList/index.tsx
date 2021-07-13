@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -36,6 +36,7 @@ interface Props {
 
 const ChatList: FC<Props> = ({ chats, myId, selected, onChatSelect }) => {
   const [guestData, setGuestData] = useState<any>(null);
+  const [hasChatroom, setHasChatroom] = useState<boolean>(false);
 
   const renderedChats = chats.map((chat) => (
     <ChatListItem
@@ -53,6 +54,12 @@ const ChatList: FC<Props> = ({ chats, myId, selected, onChatSelect }) => {
     if (db) {
       if (myId) {
         const chatroomId = uuidv4();
+        const chatroomData = {
+          chatroomId,
+          name: guestData.name,
+          otherUserId: guestData.value,
+        };
+
         db.collection('chatroom').doc(chatroomId).set({
           messages: [],
         });
@@ -60,11 +67,7 @@ const ChatList: FC<Props> = ({ chats, myId, selected, onChatSelect }) => {
           .doc(myId)
           .collection('chatroomIds')
           .doc(chatroomId)
-          .set({
-            chatroomId,
-            name: guestData.name,
-            otherUserId: guestData.value,
-          });
+          .set(chatroomData);
         db.collection('chatlist')
           .doc(guestData.value)
           .collection('chatroomIds')
@@ -74,7 +77,36 @@ const ChatList: FC<Props> = ({ chats, myId, selected, onChatSelect }) => {
             name: localStorage.getItem('name'),
             chatroomId,
           });
+
+        onChatSelect(chatroomData);
       }
+    }
+  };
+
+  const onSearchSelection = async (data: any) => {
+    if (db) {
+      // If a user is found, it means that the user already has a chatroom with the
+      // selected user. In that case, set the button to "Go to chatroom" and close popup.
+      // Otherwise, create a new chatroom for them
+
+      db.collection('chatlist')
+        .doc(myId)
+        .collection('chatroomIds')
+        .where('otherUserId', '==', data.value)
+        .get()
+        .then((results) => {
+          if (results.empty) {
+            setGuestData(data);
+            setHasChatroom(false);
+          } else {
+            results.forEach((doc) => {
+              const result = doc.data();
+              setHasChatroom(true);
+              setGuestData(result);
+            });
+          }
+        })
+        .catch((err) => console.error(err));
     }
   };
 
@@ -101,19 +133,25 @@ const ChatList: FC<Props> = ({ chats, myId, selected, onChatSelect }) => {
           <ModalHeader>Create new Chat</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <SearchBar setTerm={setGuestData} />
+            <SearchBar setTerm={onSearchSelection} />
           </ModalBody>
           <ModalFooter>
+            <Button onClick={onClose} {...styleProps.modalButton}>
+              Close
+            </Button>
             <Button
+              isDisabled={!guestData}
               onClick={() => {
-                createRoom(guestData);
+                if (!hasChatroom) {
+                  createRoom(guestData);
+                } else {
+                  onChatSelect(guestData);
+                }
+                onClose();
               }}
               {...styleProps.createModalButton}
             >
-              Create chatroom
-            </Button>
-            <Button onClick={onClose} {...styleProps.modalButton}>
-              Close
+              {hasChatroom ? 'Go to chatroom' : 'Create chatroom'}
             </Button>
           </ModalFooter>
         </ModalContent>

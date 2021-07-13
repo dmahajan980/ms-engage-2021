@@ -9,6 +9,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import SideBar from '../SideBar';
 import ChatPage from '../ChatPage';
+import JoinCallPage from '../JoinCallPage';
 
 import { useIpContext } from '../../context/IP';
 import syncLoginWithServer from '../../utils/syncLoginWithServer';
@@ -61,11 +62,11 @@ const Home: FC<{}> = () => {
       <SideBar selectedSection={selected} onSectionClick={setSelected} />
       <Box {...styleProps.contentWrapper}>
         <Switch>
-          <Route exact path='/chat'>
+          <Route exact path='/'>
             <ChatPage />
           </Route>
           <Route exact path='/call'>
-            Call
+            <JoinCallPage />
           </Route>
         </Switch>
       </Box>

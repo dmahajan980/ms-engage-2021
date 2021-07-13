@@ -31,7 +31,14 @@ const ChatPage: FC<{}> = () => {
         onChatSelect={setSelectedChat}
       />
 
-      <MessageWindow chat={selectedChat} myId={myId} />
+      {selectedChat && (
+        <MessageWindow
+          chatroomId={selectedChat.chatroomId}
+          userName={selectedChat.name}
+          userId={selectedChat.otherUserId}
+          myId={myId}
+        />
+      )}
     </Flex>
   );
 };

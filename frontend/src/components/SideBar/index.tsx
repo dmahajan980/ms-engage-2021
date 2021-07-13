@@ -19,7 +19,7 @@ const SideBar: FC<Props> = ({ selectedSection, onSectionClick }) => {
     <Flex {...styleProps.wrapper}>
       <Button
         as={RouterLink}
-        to={`/${SelectedSection.Chat}`}
+        to={`/`}
         onClick={() => onSectionClick(SelectedSection.Chat)}
         {...styleProps.button}
         {...(selectedSection === SelectedSection.Chat &&

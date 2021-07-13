@@ -8,5 +8,5 @@ export interface Chat {
   name: string;
   otherUserId: string;
   chatroomId: string;
-  lastMessage: ChatMessage;
+  lastMessage?: ChatMessage;
 }

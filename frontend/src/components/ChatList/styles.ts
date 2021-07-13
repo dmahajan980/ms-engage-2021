@@ -36,6 +36,19 @@ const styleProps: StyleSheet = {
     borderRadius: 0,
   },
   createModalButton: {
+    bgColor: 'theme.purpleBlue.light',
+    color: 'white',
+    borderRadius: 0,
+
+    _active: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+
+    _hover: {
+      bgColor: 'theme.purpleBlue.normal',
+    },
+  },
+  modalButton: {
     bgColor: 'white',
     borderRadius: 0,
     color: 'theme.purpleBlue.light',
@@ -47,19 +60,6 @@ const styleProps: StyleSheet = {
 
     _hover: {
       bgColor: 'white',
-    },
-  },
-  modalButton: {
-    bgColor: 'theme.purpleBlue.light',
-    color: 'white',
-    borderRadius: 0,
-
-    _active: {
-      bgColor: 'theme.purpleBlue.normal',
-    },
-
-    _hover: {
-      bgColor: 'theme.purpleBlue.normal',
     },
   },
   wrapper: {

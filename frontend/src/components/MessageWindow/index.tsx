@@ -1,47 +1,52 @@
-import { FC } from 'react';
-import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import { FC, useLayoutEffect, useRef } from 'react';
+import { Avatar, Box, Flex, IconButton, Text, Tooltip } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { PlusSquareIcon } from '@chakra-ui/icons';
+import { v4 as uuidv4 } from 'uuid';
 
 import ChatInput from '../ChatInput';
 import Message from '../Message';
 
 import { db } from '../../config/firebase';
 
-import { Chat } from '../../types/Chat';
-
 import styleProps from './styles';
 
 interface Props {
-  chat: Chat | null;
   myId: string;
+  chatroomId: string;
+  userName: string;
+  userId: string;
 }
 
 // Takes in ID of the chatroom
-const MessageWindow: FC<Props> = ({ chat, myId }) => {
+const MessageWindow: FC<Props> = ({ myId, chatroomId, userId, userName }) => {
   const [messages, isLoading] = useCollectionData(
-    db && chat
+    db && chatroomId
       ? db
           .collection('chats')
-          .doc(chat.chatroomId)
+          .doc(chatroomId)
           .collection('messages')
           .orderBy('time', 'asc')
       : null
   );
 
+  const lastMessageRef = useRef<HTMLDivElement>(null);
   const renderedMessages: any[] = [];
   if (!isLoading) {
     if (messages) {
-      messages.forEach((message) => {
+      messages.forEach((message, index) => {
         renderedMessages.push(
           <Flex
-            key={message.id}
+            key={`${message.time}${message.sentBy}`}
             justifyContent={
-              message.sentBy === chat?.otherUserId ? 'flex-start' : 'flex-end'
+              message.sentBy === userId ? 'flex-start' : 'flex-end'
             }
+            ref={lastMessageRef}
+            {...(index === messages.length - 1 && { ref: lastMessageRef })}
           >
             <Message
               timestamp={message.time}
-              isTimeOnLeft={message.sentBy !== chat?.otherUserId}
+              isTimeOnLeft={message.sentBy !== userId}
             >
               {message.value}
             </Message>
@@ -52,42 +57,73 @@ const MessageWindow: FC<Props> = ({ chat, myId }) => {
   }
 
   const storeMessage = (message: string) => {
-    if (db && chat) {
+    if (db && chatroomId) {
       const messageObj = {
         sentBy: myId,
         value: message,
         time: Date.now(),
       };
       db.collection('chats')
-        .doc(chat.chatroomId)
+        .doc(chatroomId)
         .collection('messages')
         .add(messageObj);
 
       db.collection('chatlist')
         .doc(myId)
         .collection('chatroomIds')
-        .doc(chat.chatroomId)
+        .doc(chatroomId)
         .update({
           lastMessage: messageObj,
         });
 
       db.collection('chatlist')
-        .doc(chat.otherUserId)
+        .doc(userId)
         .collection('chatroomIds')
-        .doc(chat.chatroomId)
+        .doc(chatroomId)
         .update({
           lastMessage: messageObj,
         });
     }
   };
 
+  const inviteUser = () => {
+    storeMessage(`
+      Hey, I would like to have a call with you.
+      To join the call, click on this invite link below:
+    `);
+    setTimeout(() => {
+      storeMessage(`${window.location.href}room/${uuidv4()}`);
+    }, 300);
+  }
+
+  useLayoutEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView();
+    }
+  }, [messages]);
+
   return (
     <Flex {...styleProps.wrapper}>
-      {chat ? (
+      {chatroomId ? (
         <>
           <Flex {...styleProps.detailsWrapper}>
-            <Avatar name={chat.name} {...styleProps.avatar} />
-            <Text {...styleProps.name}>{chat.name}</Text>
+            <Flex {...styleProps.details}>
+              <Avatar name={userName} {...styleProps.avatar} />
+              <Text {...styleProps.name}>{userName}</Text>
+            </Flex>
+            <Flex>
+              <Tooltip
+                label={`Invite ${userName.split(' ')[0]} for a call`}
+                placement='left'
+              >
+                <IconButton
+                  icon={<PlusSquareIcon {...styleProps.inviteIcon} />}
+                  aria-label='Invite user'
+                  onClick={inviteUser}
+                  {...styleProps.inviteIconButton}
+                />
+              </Tooltip>
+            </Flex>
           </Flex>
           <Box {...styleProps.mainWindow}>
             <Box {...styleProps.chatBox}>{renderedMessages}</Box>

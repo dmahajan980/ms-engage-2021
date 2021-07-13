@@ -21,9 +21,9 @@ const ChatListItem: FC<Props> = ({
   ...props
 }) => {
   const { name, lastMessage } = data;
-  const date = new Date(lastMessage.time * 1000);
+  const date = lastMessage && new Date(lastMessage.time);
 
-  return (
+  return lastMessage ? (
     <Flex
       onClick={onClick}
       {...styleProps.wrapper}
@@ -41,13 +41,15 @@ const ChatListItem: FC<Props> = ({
         </Flex>
       </Flex>
 
-      <Flex>
-        <Text {...styleProps.name}>
-          {date.getHours()}:{date.getMinutes()}
-        </Text>
-      </Flex>
+      {date ? (
+        <Flex>
+          <Text {...styleProps.time}>
+            {date.getHours()}:{date.getMinutes()}
+          </Text>
+        </Flex>
+      ) : null}
     </Flex>
-  );
+  ) : null;
 };
 
 export default ChatListItem;

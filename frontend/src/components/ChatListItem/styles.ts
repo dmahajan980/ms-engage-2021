@@ -22,6 +22,10 @@ const styleProps: StyleSheet = {
     fontSize: 14,
     lineHeight: 1,
   },
+  time: {
+    fontSize: 12,
+    lineHeight: 1,
+  },
   selected: {
     bgColor: '#FFFFFFA0',
   },

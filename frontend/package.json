@@ -14,6 +14,7 @@
     "firebase": "^8.7.1",
     "framer-motion": "^4",
     "react": "^17.0.2",
+    "react-anchorme": "^2.2.1",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^3.0.4",
     "react-router-dom": "^5.2.0",

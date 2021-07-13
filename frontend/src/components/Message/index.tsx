@@ -1,9 +1,12 @@
 import { FC, useState } from 'react';
 import { Flex, Text } from '@chakra-ui/react';
+import { Anchorme } from 'react-anchorme';
+
+import MessageLink from "../MessageLink";
 
 import styleProps from './styles';
 
-const Message: FC<{ timestamp: number; isTimeOnLeft: boolean }> = ({
+const Message: FC<{ timestamp: number; isTimeOnLeft: boolean; children: string; }> = ({
   children,
   timestamp,
   isTimeOnLeft,
@@ -25,8 +28,12 @@ const Message: FC<{ timestamp: number; isTimeOnLeft: boolean }> = ({
           {date.getMinutes()}
         </Text>
       )}
-      <Text {...styleProps.message} {...props}>
-        {children}
+      <Text
+        {...styleProps.message}
+        {...props}
+        {...(isTimeOnLeft && { bgColor: '#E9EAF6', color: 'black' })}
+      >
+        <Anchorme linkComponent={MessageLink}>{children}</Anchorme>
       </Text>
     </Flex>
   );
