@@ -3,10 +3,7 @@ const { v4: uuidV4 } = require('uuid');
 
 const home = express.Router();
 
-home.get('/:roomId', (req, res) => {
-  console.log(req.params.roomId)
-  res.send(req.params.roomId);
-});
+home.get('/:roomId', (req, res) => res.send(req.params.roomId));
 
 home.get('/', (req, res) => {
   // Don't redirect. Send the room id to client.

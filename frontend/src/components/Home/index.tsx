@@ -4,10 +4,11 @@ import {
   InteractionRequiredAuthError,
   InteractionStatus,
 } from '@azure/msal-browser';
-import { Box, useToast } from '@chakra-ui/react';
+import { Box, Flex, useToast } from '@chakra-ui/react';
 import { Route, Switch } from 'react-router-dom';
 
 import SideBar from '../SideBar';
+import ChatPage from '../ChatPage';
 
 import { useIpContext } from '../../context/IP';
 import syncLoginWithServer from '../../utils/syncLoginWithServer';
@@ -20,7 +21,7 @@ const Home: FC<{}> = () => {
   const { instance, inProgress, accounts } = useMsal();
   const toast = useToast();
   const IP = useIpContext();
-  
+
   const [selected, setSelected] = useState(SelectedSection.Chat);
 
   useEffect(() => {
@@ -56,17 +57,19 @@ const Home: FC<{}> = () => {
   }, [instance, accounts, inProgress, toast, IP]);
 
   return (
-    <Box {...styleProps.wrapper}>
+    <Flex {...styleProps.wrapper}>
       <SideBar selectedSection={selected} onSectionClick={setSelected} />
-      <Switch>
-        <Route exact path='chat'>
-          Chat
-        </Route>
-        <Route exact path='call'>
-          Call
-        </Route>
-      </Switch>
-    </Box>
+      <Box {...styleProps.contentWrapper}>
+        <Switch>
+          <Route exact path='/chat'>
+            <ChatPage />
+          </Route>
+          <Route exact path='/call'>
+            Call
+          </Route>
+        </Switch>
+      </Box>
+    </Flex>
   );
 };
 

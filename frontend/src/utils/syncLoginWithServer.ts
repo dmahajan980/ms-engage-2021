@@ -13,10 +13,9 @@ const syncLoginWithServer = async (
       return;
     }
 
-    console.log(name, email, uniqueId)
-
     localStorage.setItem('name', name);
     localStorage.setItem('email', email);
+    localStorage.setItem('uniqueId', uniqueId);
 
     try {
       const { data: resData } = await axios.post(`${IP}/auth/sign-in/`, {
@@ -28,7 +27,7 @@ const syncLoginWithServer = async (
         },
       });
 
-      localStorage.setItem('authToken', resData.data);
+      localStorage.setItem('msAuthToken', resData.data);
     } catch (error) {
       throw new Error(error);
     }

@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const home = require('./routes/home');
 const auth = require('./routes/auth');
+const users = require('./routes/users');
 const socketCallback = require('./socket');
 
 // Instantiates Express app.
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 // Routes
 // TODO: Add v1 before APIs
 app.use('/auth', auth);
+app.use('/users', users);
 app.use('/', home);
 
 // IO Connection
