@@ -35,7 +35,8 @@ const Time: FC<{}> = () => {
 
   return (
     <Text {...styleProps.text}>
-      {timeData.hours % 12}:{timeData.minutes} {timeData.hours > 11 ? 'PM' : 'AM'}
+      {timeData.hours % 12}:{timeData.minutes < 10 ? '0' : ''}
+      {timeData.minutes} {timeData.hours > 11 ? 'PM' : 'AM'}
     </Text>
   );
 };

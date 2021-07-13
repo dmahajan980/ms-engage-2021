@@ -1,5 +1,5 @@
 import { FC, useRef, useState } from 'react';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import ChatList from '../ChatList';
@@ -31,13 +31,24 @@ const ChatPage: FC<{}> = () => {
         onChatSelect={setSelectedChat}
       />
 
-      {selectedChat && (
+      {selectedChat ? (
         <MessageWindow
           chatroomId={selectedChat.chatroomId}
           userName={selectedChat.name}
           userId={selectedChat.otherUserId}
           myId={myId}
         />
+      ) : (
+        <Flex
+          h='calc(100vh - 3rem)'
+          w='calc(100% - 20rem)'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <Text fontSize='xl' fontWeight='light'>
+            Open a chat or create a new chat to start messaging.
+          </Text>
+        </Flex>
       )}
     </Flex>
   );
