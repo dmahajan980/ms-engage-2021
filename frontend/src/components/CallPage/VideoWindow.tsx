@@ -9,8 +9,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
-import { io, Socket } from 'socket.io-client';
 import { useParams, Link as RouterLink } from 'react-router-dom';
+import { io, Socket } from 'socket.io-client';
 import Peer from 'simple-peer';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 import { motion } from 'framer-motion';
