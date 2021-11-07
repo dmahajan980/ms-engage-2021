@@ -1,5 +1,7 @@
 # Cheems
 
+(Documentation in Progress)
+
 Cheems is a communication platform allowing the users to connect via video conferencing
 and text messaging. The project was built as a solution to the challenge described
 during [Microsoft Engage 2021](https://microsoft.acehacker.com/engage2021/).
