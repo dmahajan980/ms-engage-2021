@@ -1,94 +1,236 @@
 # Cheems
 
-(Documentation in Progress)
+Cheems is a web-based communication platform inspired by Microsoft Teams, enabling users to connect via video conferencing and real-time text messaging. Built for the [Microsoft Engage 2021](https://microsoft.acehacker.com/engage2021/) challenge, Cheems demonstrates a full-stack approach to modern, scalable, and interactive communication apps.
 
-Cheems is a communication platform allowing the users to connect via video conferencing
-and text messaging. The project was built as a solution to the challenge described
-during [Microsoft Engage 2021](https://microsoft.acehacker.com/engage2021/).
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Architecture Overview](#architecture-overview)
+- [Tech Stack](#tech-stack)
+- [Installation & Setup](#installation--setup)
+- [Third-Party Tools & Services](#third-party-tools--services)
+- [Usage](#usage)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+---
+
+## Features
+
+- **Microsoft Account Authentication** (via Azure)
+- **Video Conferencing** (1:1 and group calls)
+- **Real-time Chat** (with persistent history)
+- **Invite Links** for meetings and chats
+- **Responsive UI** (desktop & mobile)
+- **User Presence & Status**
+- **Modern UI/UX** (Chakra UI, Framer Motion)
+- **Secure JWT-based Backend**
+- **Cloud Database** (MongoDB Atlas)
+- **Firebase Integration** (for chat and presence)
+- **Scalable WebSocket Communication** (Socket.IO)
+
+---
+
+## Architecture Overview
+
+```mermaid
+graph TD
+  A["Frontend (React/TypeScript)"] -- "REST/Socket.IO" --> B["Backend (Node.js/Express)"]
+  B -- "MongoDB" --> C[("MongoDB Atlas")]
+  A -- "Firebase SDK" --> D["Firebase (Chat/Presence)"]
+  A -- "OAuth2" --> E["Microsoft Azure (Authentication)"]
+```
+
+- **Frontend**: React app (TypeScript), handles UI, authentication, and real-time features.
+- **Backend**: Node.js/Express, manages authentication, user data, and signaling for calls.
+- **Database**: MongoDB Atlas for persistent user and room data.
+- **Real-time**: Socket.IO for signaling and call setup.
+- **Chat/Presence**: Firebase Firestore for chat messages and user presence.
+- **Authentication**: Microsoft Azure AD (OAuth2) for secure login.
+
+---
 
 ## Tech Stack
 
-Cheems is built primarily on JavaScript. The following technologies were used to prepare
-the whole project:
+### Frontend
 
-1. **Front-end**
+- **React.js** (TypeScript)
+- **Chakra UI** (component library)
+- **Framer Motion** (animations)
+- **React Router** (routing)
+- **Socket.IO Client** (real-time communication)
+- **Firebase JS SDK** (Firestore for chat, presence)
+- **MSAL (Microsoft Authentication Library)** (Microsoft OAuth)
+- **Axios** (HTTP requests)
+- **Simple-Peer** (WebRTC abstraction for peer-to-peer video/audio)
+- **WebRTC APIs** (mediaDevices, getUserMedia)
+- **uuid** (unique IDs)
+- **React Firebase Hooks** (Firebase integration)
+- **Jest** & **React Testing Library** (testing)
+- **TypeScript** (static typing)
 
-   - [TypeScript](https://www.typescriptlang.org/)
-   - [React.js](https://reactjs.org/)
-   - [Chakra UI](https://chakra-ui.com/)
-   - [Framer Motion](https://www.framer.com/motion/)
-   
-2. **Back-end**
+### Backend
 
-   - JavaScript
-   - Node.js
-   - MongoDB (for database)
-   
-A few helper libraries such as [Socket.IO](https://socket.io/) were used to deal with
-connection failures between server and client and between users. To maintain the code
-quality and standards, developer tools (linters, formatters, and parsers) such as
-[Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) were set up in place.
+- **Node.js** (Express)
+- **Socket.IO** (real-time signaling)
+- **MongoDB** (Mongoose, MongoDB client)
+- **JWT** (jsonwebtoken, authentication)
+- **dotenv** (environment variables)
+- **body-parser** (request parsing)
+- **uuid** (unique IDs)
+- **Nodemon** (development server)
+- **ESLint** & **Prettier** (linting/formatting)
 
-## Installation
+### Real-Time & Peer-to-Peer
 
-Follow the steps below to run the project locally:
+- **WebRTC** (via Simple-Peer and direct use of mediaDevices/getUserMedia)
+- **Socket.IO** (signaling for WebRTC, chat, and presence)
 
-1. Download or clone the project.
+### Third-Party Services
 
-2. Set up a MongoDB cluster.
+- **MongoDB Atlas** (cloud database)
+- **Firebase** (Firestore for chat, presence)
+- **Microsoft Azure** (OAuth authentication)
 
-   1. Create a remote MongoDB cluster ([*read more*](https://www.mongodb.com/cloud/atlas/register)).
-   
-   2. Once a cluster is created, navigate to the **Database Deployments section** (see
-      below).
+---
 
-      ![Database Deployments Section](https://i.postimg.cc/8kdzNgV5/Screenshot-2021-09-05-at-12-51-54-AM.png)
-      
-   3. Click on **Connect** button on the right of your cluster name. This will open a new
-      dialog window. Select **Connect your application** and copy the connection string.
+## Installation & Setup
 
-3. Navigate to the `backend` directory.
+### Prerequisites
 
-   1. Install all dependencies:
+- **Node.js** (v12+)
+- **npm** or **yarn**
+- **MongoDB Atlas** account
+- **Firebase** project
+- **Microsoft Azure** account (for OAuth)
 
-      ```bash
-      npm install
-      ```
-      
-   2. Create a copy of the `.env.template` file and rename the copy as `.env`.
-   
-   3. Open the `.env` file. Paste the MongoDB cluster connection string (copied in step
-      2.3) as value of the `MONGODB_URI` environment variable.
-      
-   4. Type any random string as value of the `JWT_SECRET` variable in the same file.
-      Make sure to store this somewhere for future references.
-      
-   5. Set the port number on which the backend should run (by setting the value of `PORT`
-      variable). Default port number is 9000.
-      
-      ***Important***: Avoid port 3000 since app's front-end runs on the same port.
+### 1. Clone the Repository
 
-3. Setup a Google Firebase project for the chat to work correctly.
-   
-   1. Follow **only Step 1** from [this article](https://firebase.google.com/docs/web/setup#create-firebase-project-and-app)
-      to obtain your Firebase credentials.
-      
-   2. Save the Firebase credentials for use in front-end setup.
+```bash
+git clone https://github.com/dmahajan980/ms-engage-2021.git
+cd ms-engage-2021
+```
 
-4. Register your application on Microsoft Azure Portal for sign-in to work correctly.
-   
-   1. Navigate to [Microsoft Azure Portal](https://portal.azure.com/) and sign in.
+### 2. Backend Setup
 
-   2. Search **App Services** in the search bar on top of the page and open it.
+```bash
+cd backend
+npm install
+cp .env.template .env
+# Edit .env with your MongoDB URI, JWT secret, and desired PORT
+```
 
-   3. Click on **Create** button. Follow through the steps to register your web application.
+- **MONGODB_URI**: Your MongoDB Atlas connection string
+- **JWT_SECRET**: Any random string (keep it secret)
+- **PORT**: Backend port (default: 9000)
 
-<!-- TODO: Complete from here. -->
+### 3. Firebase Setup
 
-5. Navigate to the `frontend` directory.
+- Create a Firebase project: [Firebase Console](https://console.firebase.google.com/)
+- Get your web app credentials (API key, project ID, etc.)
+- Add these to your frontend environment variables (see below).
 
-   1. Install all dependencies:
+### 4. Microsoft Azure Setup
 
-      ```bash
-      npm install
-      ```
+- Register your app at [Azure Portal](https://portal.azure.com/)
+- Get your client ID, tenant ID, and other credentials.
+- Add these to your frontend environment variables.
+
+### 5. Frontend Setup
+
+```bash
+cd ../frontend
+npm install
+# or
+yarn install
+cp .env.template .env
+```
+
+- Add your Firebase and Azure credentials in the **.env** file.
+
+### 6. Run the App
+
+- **Backend**:  
+  ```bash
+  cd backend
+  npm start
+  ```
+- **Frontend**:  
+  ```bash
+  cd frontend
+  npm start
+  # or
+  yarn start
+  ```
+
+- Visit [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Third-Party Tools & Services
+
+- **MongoDB Atlas**: Cloud database
+- **Firebase**: Real-time chat and presence
+- **Microsoft Azure**: Authentication (OAuth2)
+- **Socket.IO**: Real-time signaling
+- **Chakra UI**: UI components
+- **Framer Motion**: Animations
+
+---
+
+## Usage
+
+- **Sign in** with your Microsoft account.
+- **Start a new meeting** or **join** with an invite link.
+- **Chat** with other users in real time.
+- **Invite** users to calls directly from chat.
+
+---
+
+## Folder Structure
+
+```
+ms-engage-2021-main/
+  backend/         # Node.js backend (Express, MongoDB, Socket.IO)
+    src/
+      routes/      # API routes (auth, users, home)
+      db/          # Database models and schema
+      socket/      # Socket.IO logic
+  frontend/        # React frontend (TypeScript, Chakra UI)
+    src/
+      components/  # React components (Chat, Call, UI)
+      config/      # Firebase, Azure, theme configs
+      context/     # React context providers
+      hooks/       # Custom React hooks
+      utils/       # Utility functions
+```
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open issues or pull requests for improvements, bug fixes, or new features.
+
+---
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+## Contact
+
+- **Author**: Divyanshu Mahajan
+- **Challenge**: Microsoft Engage 2021
+- **Email**: [divyanshumahajan98@gmail.com]
+
+---
+
+**Note:**  
+- For production deployment, configure environment variables securely and use HTTPS.
+- For more details, see the code comments and configuration files.
